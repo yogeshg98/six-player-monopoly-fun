@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,7 @@ import PropertyCard from '@/components/PropertyCard';
 import { useGameState } from '@/hooks/useGameState';
 import { Property, Player } from '@/lib/gameData';
 import { cn } from '@/lib/utils';
-import { Book, DollarSign, Dice, Trophy, Info } from 'lucide-react';
+import { Book, DollarSign, Dice1, Trophy, Info, Users } from 'lucide-react';
 
 const Index = () => {
   const { 
@@ -64,14 +63,12 @@ const Index = () => {
     setShowStartDialog(true);
   };
   
-  // Find property owner
   const findPropertyOwner = (propertyId: number): Player | undefined => {
     return gameState.players.find(player => 
       player.properties.includes(propertyId)
     );
   };
   
-  // Get current property based on player position
   const getCurrentProperty = (): Property | undefined => {
     if (!gameState.gameStarted) return undefined;
     
@@ -79,11 +76,9 @@ const Index = () => {
     return gameState.properties.find(p => p.position === currentPlayer.position);
   };
   
-  // Content when game has not started
   if (!gameState.gameStarted) {
     return (
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-b from-background to-secondary/30">
-        {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[10%] left-[5%] w-24 h-24 bg-primary/5 rounded-full animate-spin-slow"></div>
           <div className="absolute bottom-[20%] right-[10%] w-32 h-32 bg-primary/10 rounded-full animate-spin-slow" style={{ animationDuration: '12s' }}></div>
@@ -102,7 +97,7 @@ const Index = () => {
           
           <div className="flex flex-col sm:flex-row gap-6 mb-16 animate-slide-up" style={{ animationDelay: '200ms' }}>
             <Button onClick={() => setShowStartDialog(true)} size="lg" className="gap-2">
-              <Dice size={18} />
+              <Dice1 size={18} />
               Start New Game
             </Button>
             
@@ -201,7 +196,6 @@ const Index = () => {
     );
   }
   
-  // Game is active, show game board
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30 py-6 px-4">
       <div className="max-w-7xl mx-auto">
@@ -221,7 +215,6 @@ const Index = () => {
         </header>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left sidebar - Player info */}
           <div className="lg:col-span-3 space-y-4">
             <h2 className="text-lg font-semibold mb-2">Players</h2>
             <div className="space-y-3">
@@ -236,7 +229,6 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Game board */}
           <div className="lg:col-span-6">
             <GameBoard
               properties={gameState.properties}
@@ -245,7 +237,6 @@ const Index = () => {
             />
           </div>
           
-          {/* Right sidebar - Game controls */}
           <div className="lg:col-span-3 space-y-6">
             <div className="glass p-4 rounded-lg shadow-glass">
               <h2 className="text-lg font-semibold mb-4">Last Action</h2>
@@ -275,7 +266,6 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Property Details Dialog */}
       <Dialog open={showPropertyDialog} onOpenChange={setShowPropertyDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

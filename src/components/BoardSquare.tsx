@@ -7,6 +7,7 @@ interface BoardSquareProps {
   property: Property;
   players: Player[];
   className?: string;
+  style?: React.CSSProperties;
   onClick?: () => void;
 }
 
@@ -14,6 +15,7 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
   property,
   players,
   className,
+  style,
   onClick
 }) => {
   // Filter players that are on this square
@@ -94,6 +96,7 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
         getSpecialClass(),
         className
       )}
+      style={style}
       onClick={onClick}
     >
       {property.type === 'property' && (
