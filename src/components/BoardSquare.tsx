@@ -20,6 +20,7 @@ interface BoardSquareProps {
   style?: React.CSSProperties;
   onClick?: () => void;
   isMobile?: boolean;
+  isCorner?: boolean;
 }
 
 const BoardSquare: React.FC<BoardSquareProps> = ({
@@ -28,7 +29,8 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
   className,
   style,
   onClick,
-  isMobile = false
+  isMobile = false,
+  isCorner = false
 }) => {
   // Filter players that are on this square
   const playersOnSquare = players.filter(player => player.position === property.position);
@@ -92,38 +94,50 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
     }
   };
   
-  const renderName = () => {
+  const renderCornerSquare = () => {
+    switch (property.name) {
+      case 'GO':
+        return (
+          <div className="flex flex-col items-center justify-center h-full w-full p-1 text-center">
+            <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-green-600 rotate-[225deg]" />
+            <div className="text-green-600 font-bold text-xs md:text-sm mt-1">GO</div>
+            <div className="text-[7px] md:text-[9px] text-green-600">COLLECT $200</div>
+          </div>
+        );
+      case 'Jail / Just Visiting':
+        return (
+          <div className="flex flex-col items-center justify-center h-full w-full p-1 text-center">
+            <div className="flex items-center justify-center bg-orange-100 w-3/4 h-3/4 rounded-md border border-orange-300">
+              <LockKeyhole className="h-4 w-4 md:h-5 md:w-5 text-orange-600" />
+              <div className="absolute bottom-0 left-0 w-full text-[7px] md:text-[9px] text-orange-600 font-semibold">JUST VISITING</div>
+            </div>
+          </div>
+        );
+      case 'Free Parking':
+        return (
+          <div className="flex flex-col items-center justify-center h-full w-full p-1 text-center">
+            <ParkingCircle className="h-4 w-4 md:h-5 md:w-5 text-red-600" />
+            <div className="text-red-600 font-bold text-xs md:text-sm mt-1">FREE</div>
+            <div className="text-[7px] md:text-[9px] text-red-600">PARKING</div>
+          </div>
+        );
+      case 'Go To Jail':
+        return (
+          <div className="flex flex-col items-center justify-center h-full w-full p-1 text-center">
+            <div className="text-red-600 font-bold text-xs md:text-sm">GO TO</div>
+            <LockKeyhole className="h-4 w-4 md:h-5 md:w-5 text-red-600 my-1" />
+            <div className="text-red-600 font-bold text-xs md:text-sm">JAIL</div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+  
+  const renderNormalSquare = () => {
     // For special properties, show special rendering
     if (property.type === 'special') {
       switch (property.name) {
-        case 'GO':
-          return (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-green-600 font-bold rotate-45">GO</div>
-              <ArrowRight className="h-3 w-3 text-green-600 mt-1 rotate-45" />
-            </div>
-          );
-        case 'Jail / Just Visiting':
-          return (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-orange-600 font-bold -rotate-45">JAIL</div>
-              <LockKeyhole className="h-3 w-3 text-orange-600 mt-1" />
-            </div>
-          );
-        case 'Free Parking':
-          return (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-red-600 font-bold -rotate-45">FREE</div>
-              <ParkingCircle className="h-3 w-3 text-red-600 mt-1" />
-            </div>
-          );
-        case 'Go To Jail':
-          return (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-red-600 font-bold rotate-45">GO TO</div>
-              <div className="text-red-600 font-bold rotate-45">JAIL</div>
-            </div>
-          );
         case 'Chance':
           return (
             <div className="flex flex-col items-center justify-center">
@@ -155,7 +169,7 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
     // For normal properties, show name and price
     return (
       <div className="text-center">
-        <div className="text-[7px] leading-tight truncate font-medium">{property.name}</div>
+        <div className="text-[7px] leading-tight truncate font-medium max-w-full">{property.name}</div>
         <div className="text-[7px] font-semibold mt-0.5">${property.price}</div>
       </div>
     );
@@ -164,10 +178,10 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
   return (
     <div
       className={cn(
-        'relative h-full w-full overflow-hidden border border-gray-300 flex flex-col items-center justify-between transition-all',
+        'relative overflow-hidden border border-gray-300 flex flex-col items-center justify-between transition-all',
         property.type === 'property' ? 'p-0.5' : 'p-0.5',
         getSpecialClass(),
-        property.position % 10 === 0 ? 'rounded-lg bg-white/90' : 'rounded-md bg-white/80',
+        isCorner ? 'rounded-lg bg-white/90' : 'rounded-md bg-white/80',
         className
       )}
       style={{
@@ -176,17 +190,19 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
       }}
       onClick={onClick}
     >
-      {property.type === 'property' && (
+      {property.type === 'property' && !isCorner && (
         <div className={cn('h-2 w-full rounded-t-sm', getColorClass())} />
       )}
       
-      <div className="flex-1 flex items-center justify-center">
-        {renderName()}
+      <div className="flex-1 flex items-center justify-center w-full">
+        {isCorner ? renderCornerSquare() : renderNormalSquare()}
       </div>
       
-      <div className="absolute top-0 right-0 p-0.5">
-        {getPropertyIcon()}
-      </div>
+      {!isCorner && (
+        <div className="absolute top-0 right-0 p-0.5">
+          {getPropertyIcon()}
+        </div>
+      )}
       
       {owner && (
         <div 

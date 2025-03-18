@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -217,7 +218,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-3 space-y-4">
             <h2 className="text-lg font-semibold mb-2">Players</h2>
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
               {gameState.players.map((player, index) => (
                 <PlayerCard
                   key={player.id}
@@ -230,11 +231,14 @@ const Index = () => {
           </div>
           
           <div className="lg:col-span-6">
-            <GameBoard
-              properties={gameState.properties}
-              players={gameState.players}
-              onSelectSquare={handleSelectSquare}
-            />
+            <div className="board-container">
+              <GameBoard
+                properties={gameState.properties}
+                players={gameState.players}
+                onSelectSquare={handleSelectSquare}
+                className="w-full h-full"
+              />
+            </div>
           </div>
           
           <div className="lg:col-span-3 space-y-6">
@@ -266,6 +270,7 @@ const Index = () => {
         </div>
       </div>
       
+      {/* Property dialog */}
       <Dialog open={showPropertyDialog} onOpenChange={setShowPropertyDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
