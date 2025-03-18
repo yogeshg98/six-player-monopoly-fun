@@ -68,6 +68,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
     return '';
   };
   
+  // Make sure to use all 40 properties from the array
   const sortedProperties = [...properties].sort((a, b) => a.position - b.position);
   
   return (
