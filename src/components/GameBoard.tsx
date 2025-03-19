@@ -51,19 +51,24 @@ const GameBoard: React.FC<GameBoardProps> = ({
   
   // Helper to place properties in the correct grid position
   const getGridPosition = (position: number) => {
-    // First, determine which side of the board we're on
-    if (position <= 10) {
-      // Bottom row (0-10) - right to left
-      return { gridColumn: 11 - position, gridRow: 11 };
-    } else if (position <= 20) {
-      // Left column (11-20) - bottom to top
-      return { gridColumn: 1, gridRow: 11 - (position - 10) };
-    } else if (position <= 30) {
-      // Top row (21-30) - left to right
+    const positions = 40; // Total number of positions on the board
+    const sideLength = 11; // Number of cells per side including corners
+    
+    // Bottom row (0-10) - right to left
+    if (position >= 0 && position <= 10) {
+      return { gridColumn: sideLength - position, gridRow: sideLength };
+    } 
+    // Left column (11-20) - bottom to top
+    else if (position <= 20) {
+      return { gridColumn: 1, gridRow: sideLength - (position - 10) };
+    } 
+    // Top row (21-30) - left to right
+    else if (position <= 30) {
       return { gridColumn: position - 20, gridRow: 1 };
-    } else {
-      // Right column (31-39) - top to bottom
-      return { gridColumn: 11, gridRow: position - 30 };
+    } 
+    // Right column (31-39) - top to bottom
+    else {
+      return { gridColumn: sideLength, gridRow: position - 30 };
     }
   };
   
@@ -94,7 +99,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
       >
         {sortedProperties.map((property) => {
           const { gridColumn, gridRow } = getGridPosition(property.position);
-          const isCorner = property.position % 10 === 0;
+          const isCorner = [0, 10, 20, 30].includes(property.position);
           
           return (
             <BoardSquare
@@ -119,12 +124,12 @@ const GameBoard: React.FC<GameBoardProps> = ({
         
         {/* Center logo - smaller to not overlap with properties */}
         <div 
-          className="absolute top-[20%] left-[20%] w-[60%] h-[60%] flex items-center justify-center bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-lg"
+          className="absolute top-[25%] left-[25%] w-[50%] h-[50%] flex items-center justify-center bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-lg"
           style={{ transform: 'rotate(-45deg)' }}
         >
-          <div className="glass p-4 rounded-2xl shadow-glass flex flex-col items-center justify-center">
-            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold tracking-tight text-primary/80 mb-2">MONOPOLY</h1>
-            <div className="text-xs md:text-sm text-primary/60 font-medium">ONLINE</div>
+          <div className="glass p-3 rounded-2xl shadow-glass flex flex-col items-center justify-center">
+            <h1 className="text-lg md:text-2xl lg:text-3xl font-bold tracking-tight text-primary/80 mb-1">MONOPOLY</h1>
+            <div className="text-xs text-primary/60 font-medium">ONLINE</div>
           </div>
         </div>
       </div>

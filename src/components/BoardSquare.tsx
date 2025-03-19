@@ -153,24 +153,26 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
             </div>
           );
         default:
-          return <div className="text-xs truncate">{property.name}</div>;
+          return <div className="text-[6px] sm:text-[7px] md:text-[8px] text-center leading-tight">{property.name}</div>;
       }
     }
     
     if (property.type === 'tax') {
       return (
         <div className="flex flex-col items-center justify-center">
-          <div className="text-[7px] font-semibold">{property.name}</div>
-          <div className="text-[7px] font-semibold">PAY ${property.rent[0]}</div>
+          <div className="text-[6px] sm:text-[7px] md:text-[8px] text-center leading-tight font-semibold">{property.name}</div>
+          <div className="text-[6px] sm:text-[7px] font-semibold mt-0.5">PAY ${property.rent[0]}</div>
         </div>
       );
     }
     
     // For normal properties, show name and price
     return (
-      <div className="text-center">
-        <div className="text-[7px] leading-tight truncate font-medium max-w-full">{property.name}</div>
-        <div className="text-[7px] font-semibold mt-0.5">${property.price}</div>
+      <div className="text-center w-full px-0.5 flex flex-col items-center">
+        <div className="text-[5px] sm:text-[6px] md:text-[7px] leading-tight font-medium w-full line-clamp-2 overflow-hidden">
+          {property.name}
+        </div>
+        <div className="text-[6px] sm:text-[7px] font-semibold mt-0.5">${property.price}</div>
       </div>
     );
   };
