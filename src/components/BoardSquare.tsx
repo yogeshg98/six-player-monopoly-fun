@@ -169,7 +169,7 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
     // For normal properties, show name and price
     return (
       <div className="text-center w-full px-0.5 flex flex-col items-center">
-        <div className="text-[5px] sm:text-[6px] md:text-[7px] leading-tight font-medium w-full line-clamp-2 overflow-hidden">
+        <div className="text-[6px] sm:text-[7px] md:text-[8px] leading-tight font-medium w-full line-clamp-2 overflow-hidden">
           {property.name}
         </div>
         <div className="text-[6px] sm:text-[7px] font-semibold mt-0.5">${property.price}</div>
@@ -192,6 +192,15 @@ const BoardSquare: React.FC<BoardSquareProps> = ({
       }}
       onClick={onClick}
     >
+      {/* Debug info */}
+      {property.name === 'Kentucky Avenue' && (
+        <div className="absolute top-0 left-0 w-full h-full z-50 bg-red-100/40 flex items-center justify-center">
+          <span className="text-[5px] text-red-500 font-bold">
+            K_{property.position}
+          </span>
+        </div>
+      )}
+      
       {property.type === 'property' && !isCorner && (
         <div className={cn('h-2 w-full rounded-t-sm', getColorClass())} />
       )}
