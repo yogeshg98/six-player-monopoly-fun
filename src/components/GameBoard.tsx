@@ -72,8 +72,12 @@ const GameBoard: React.FC<GameBoardProps> = ({
     }
   };
   
-  // Make sure to use all 40 properties from the array
+  // Make sure all 40 properties are sorted by position
   const sortedProperties = [...properties].sort((a, b) => a.position - b.position);
+  
+  // Check if all positions from 0 to 39 are present
+  const allPositions = new Set(sortedProperties.map(p => p.position));
+  console.log("Property positions:", Array.from(allPositions).sort((a, b) => a - b));
   
   return (
     <div 
@@ -100,6 +104,14 @@ const GameBoard: React.FC<GameBoardProps> = ({
         {sortedProperties.map((property) => {
           const { gridColumn, gridRow } = getGridPosition(property.position);
           const isCorner = [0, 10, 20, 30].includes(property.position);
+          
+          // Debug Kentucky Avenue
+          if (property.name === "Kentucky Avenue") {
+            console.log("Rendering Kentucky Avenue:", { 
+              position: property.position, 
+              gridPosition: { gridColumn, gridRow } 
+            });
+          }
           
           return (
             <BoardSquare
